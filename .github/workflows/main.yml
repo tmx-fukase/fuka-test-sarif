@@ -32,5 +32,5 @@ jobs:
         if: steps.check_file.outputs.sarif_exists == 'true'
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: CustomReports_ViolationswithLineNumbers.sarif # コミットされているSARIFファイルのパス
+          sarif_file: CustomReports_ViolationswithLineNumbers_replace-with-relative-path.sarif # コミットされているSARIFファイルのパス
           category: pre-generated-eslint-on-windows # 識別のためのカテゴリ
