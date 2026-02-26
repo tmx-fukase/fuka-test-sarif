@@ -1,0 +1,36 @@
+name: Upload Pre-existing SARIF on Windows
+
+on:
+  push:
+    branches:
+      - main # mainブランチへのプッシュ時に実行
+  workflow_dispatch: {} # 手動でワークフローを実行できるようにする
+
+jobs:
+  upload_sarif:
+    runs-on: windows-latest # ここが重要！Windows環境のランナーを指定します
+    permissions:
+      contents: read # リポジトリのチェックアウトに必要 (デフォルトでreadなので明示しなくてもOKだが安全のため)
+      security-events: write # SARIFのアップロードに必要
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Windows PowerShellでファイルの存在チェック
+      - name: Check if SARIF file exists
+        id: check_file
+        shell: powershell # PowerShellを指定
+        run: |
+          if (Test-Path -Path "CustomReports_ViolationswithLineNumbers.sarif") {
+              Write-Host "SARIF file found: CustomReports_ViolationswithLineNumbers.sarif"
+              echo "::set-output name=sarif_exists::true"
+          } else {
+              Write-Host "SARIF file not found: CustomReports_ViolationswithLineNumbers.sarif"
+              echo "::set-output name=sarif_exists::false"
+          }
+      - name: Upload pre-existing SARIF file
+        if: steps.check_file.outputs.sarif_exists == 'true'
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: CustomReports_ViolationswithLineNumbers.sarif # コミットされているSARIFファイルのパス
+          category: pre-generated-eslint-on-windows # 識別のためのカテゴリ
