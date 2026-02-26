@@ -21,11 +21,11 @@ jobs:
         id: check_file
         shell: powershell # PowerShellを指定
         run: |
-          if (Test-Path -Path "CustomReports_ViolationswithLineNumbers.sarif") {
-              Write-Host "SARIF file found: CustomReports_ViolationswithLineNumbers.sarif"
+          if (Test-Path -Path "CustomReports_ViolationswithLineNumbers_replace-with-relative-path.sarif") {
+              Write-Host "SARIF file found: CustomReports_ViolationswithLineNumbers_replace-with-relative-path.sarif"
               echo "::set-output name=sarif_exists::true"
           } else {
-              Write-Host "SARIF file not found: CustomReports_ViolationswithLineNumbers.sarif"
+              Write-Host "SARIF file not found: CustomReports_ViolationswithLineNumbers_replace-with-relative-path.sarif"
               echo "::set-output name=sarif_exists::false"
           }
       - name: Upload pre-existing SARIF file
