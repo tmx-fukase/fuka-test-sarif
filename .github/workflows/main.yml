@@ -9,7 +9,9 @@ on:
 jobs:
   upload_sarif:
     runs-on: windows-latest # ここが重要！Windows環境のランナーを指定します
-
+    permissions:
+      contents: read # リポジトリのチェックアウトに必要 (デフォルトでreadなので明示しなくてもOKだが安全のため)
+      security-events: write # SARIFのアップロードに必要
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
